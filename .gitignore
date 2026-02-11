@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Env (keep token out of repo)
+.env
+
+# Build
+dist/
+
+# IDE / OS
+.vscode/
+.DS_Store
+*.log
+nul
+
+# TypeScript
+*.tsbuildinfo
