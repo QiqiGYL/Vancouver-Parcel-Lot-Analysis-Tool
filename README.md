@@ -1,6 +1,13 @@
 # Vancouver Parcel Lot Analysis Tool
 
-React 18 + TypeScript (strict) + Vite + Mapbox GL JS application for analyzing Vancouver parcel lots: edge classification (Frontage, Flankage, Rear Lane, Rear, Side) and lot type (Corner, Double Fronting, Standard with/without Lane).
+Application for analyzing Vancouver parcel lots: edge types (Frontage, Flankage, Rear Lane, Rear, Side) and lot type (Corner, Double Fronting, Standard with/without Lane).
+
+| Requirement |  |
+|-------------|--------|
+| Framework | React 18+ |
+| Language | TypeScript (strict mode) |
+| Build Tool | Vite |
+| Map | Mapbox GL JS |
 
 ## Setup
 
@@ -8,13 +15,13 @@ React 18 + TypeScript (strict) + Vite + Mapbox GL JS application for analyzing V
    Ensure Node.js 18+ and npm are installed.
 
 2. **Mapbox token**  
-   Create a [Mapbox account](https://account.mapbox.com/) and copy your default public token. Create a file `.env` in the project root:
+   Create a [Mapbox account](https://account.mapbox.com/) and copy your default public token. In the project root, create a `.env` file (you can copy from `.env.example`) and add:
 
    ```
    VITE_MAPBOX_ACCESS_TOKEN=pk.your_token_here
    ```
 
-   (See `.env.example`.)
+   (Note: The `.env` file is excluded from git for security.)
 
 3. **Parcel data**  
    Place `property-parcel-polygons.geojson` in the `public/` folder so it is served at `/property-parcel-polygons.geojson`. A copy step is included in the project (e.g. copy from repo root into `public/` if needed).
@@ -37,26 +44,31 @@ npm run preview   # optional: preview production build
 
 ## Features
 
-- **Map**: Vancouver downtown parcels from Vancouver Open Data (GeoJSON); Mapbox Streets base map. Click a parcel to highlight, fly to it, and run analysis.
-- **Address search**: Autocomplete scoped to Vancouver, debounced input, keyboard (arrows, Enter, Esc). Search history when the field is focused and empty, with “Clear history”.
-- **Info card**: Address, area (m²), primary street, lot type. Edge legend; selected parcel edges colored on the map (Frontage=blue, Flankage=orange, Rear Lane=purple, Rear=green, Side=gray).
-- **Debug mode**: Toggle to show centroid, properties, per-edge table, and frontage-opposite index. Edge numbers on the map are shown only when Debug is on.
+1. **Map & Parcel Interaction**  
+   Mapbox map centered on downtown Vancouver with parcel polygons rendered. Clicking a parcel highlights it and flies to it.
+
+2. **Address Search with Autocomplete**  
+   Search bar with autocomplete dropdown, scoped to Vancouver only. Keyboard navigation (arrow keys, Enter, Esc) and input debounce. Selecting a result triggers the same flow as clicking a parcel (fly to, highlight, analyze, show info card). Search history is shown when the search bar is focused and the input is empty. A “Clear history” button is visible when the history list is displayed.
+
+3. **Parcel Info Card & Classification**  
+   When a parcel is selected (via click or search): info card showing full address, area (m²), primary street, and lot type label; edge visualization on the map (Frontage=blue, Flankage=orange, Rear Lane=purple, Rear=green, Side=gray). Debug mode (toggle) shows centroid, properties, per-edge table, and frontage-opposite index; edge numbers on the map are shown only when Debug is on.
 
 ## Data and logic
 
 - **Parcel data**: [Vancouver Open Data – Property parcel polygons](https://opendata.vancouver.ca/explore/dataset/property-parcel-polygons) (GeoJSON).
 - **Road/lane proximity**: Mapbox Tilequery API (`mapbox.mapbox-streets-v8`) to detect adjacent street/lane and name matching.
 
-### Edge classification
+### Edge Types
 
-- **Frontage**: One seed = edge whose midpoint is closest to the primary street centerline (name match); then expanded to adjacent name-match edges with angle ≤10° (one run along the street).
-- **Flankage**: Edges adjacent to a different street (non-lane); collinear segments (angle ≤10°, same adjacency) form one logical flankage run.
-- **Rear Lane / Rear**: Only the edge geometrically opposite the frontage (“B”) can be Rear Lane or Rear. If that edge has >30% of its length adjacent to a lane, it is Rear Lane; else (no road/lane) it is Rear when the parcel has no Flankage. Other lane-adjacent edges stay Side.
-- **Side**: All other edges. Collinear segments are grouped by adjacency kind (lane vs street) so we do not merge across lane/street boundaries; each segment keeps its exact boundary geometry and gets the same type as its logical group.
+- **Frontage**: Edge adjacent to the parcel's primary street
+- **Flankage**: Edge adjacent to a secondary street
+- **Rear Lane**: Edge adjacent to a lane or alley
+- **Rear**: Edge on the opposite side of the Frontage that is not adjacent to any road or lane
+- **Side**: Any remaining edge connecting the Frontage/Flankage side to the Rear/Rear Lane side
 
 ### Lot types (priority order)
 
-- **Corner Lot**: Has Frontage and Flankage (two different streets); Flankage on the side.
-- **Double Fronting**: Frontage + opposite side faces a different street (B is Flankage).
-- **Standard with Lane**: One Frontage + opposite edge is Rear Lane.
-- **Standard without Lane**: One Frontage + opposite edge is Rear (no adjacent lane).
+- **Corner Lot**: Has both a Frontage edge and a Flankage edge
+- **Double Fronting**: Has 2 Frontage edges facing different streets
+- **Standard with Lane**: 1 Frontage edge + a Rear Lane edge on the opposite side
+- **Standard without Lane**: 1 Frontage edge + a Rear edge on the opposite side 
