@@ -78,13 +78,15 @@ function normVec(x: number, y: number): [number, number] {
  * Edge classification: Frontage first, then lock the "opposite" edge (B), then Side.
  *
  * Frontage: Seed = edge closest to primary street centerline (name match); then expand to adjacent
- *   name-match edges with angle ≤10° (same run along the street, like flankage).
- * Flankage: Edge adjacent to a secondary street (different from primary); e.g. corner lots.
+ *   name-match edges with angle ≤10° (same run along the street). A parcel can have multiple
+ *   frontage edges (e.g., double fronting: two frontages on opposite sides).
+ * Flankage: Edge adjacent to a secondary street (different from primary); only on the side of
+ *   frontage, never opposite to frontage. E.g., corner lots.
  *
  * Opposite (B): The single edge geometrically opposite the Frontage (other side of
- *   centroid, most parallel). Only B can be Rear Lane / Rear / or remain Flankage:
- *   - B adjacent to lane/alley → Rear Lane
- *   - B adjacent to another street → Flankage (e.g. double fronting)
+ *   centroid, most parallel). Only B can be Rear Lane / Rear / or Frontage:
+ *   - B adjacent to lane/alley (>30% length) → Rear Lane
+ *   - B adjacent to a street (not lane) → Frontage (double fronting: two frontages opposite)
  *   - B not adjacent to anything → Rear (only when no Flankage on parcel; else B stays Side)
  * Any other edge adjacent to a lane (but not B) is Side, not Rear Lane.
  *
@@ -98,9 +100,10 @@ function normVec(x: number, y: number): [number, number] {
  * Frontage vs Flankage (both adjacent to a street):
  * 1. Frontage is the edge whose adjacent street name matches the parcel's
  *    address (e.g. parcel "123 Main St" → edge nearest to "Main St" is Frontage).
+ *    Frontage can be on opposite sides (double fronting).
  * 2. Flankage is any edge adjacent to a different street that does not match
- *    the parcel's address; typically on corner lots where the parcel borders
- *    two intersecting streets.
+ *    the parcel's address; only on the side of frontage, never opposite.
+ *    Typically on corner lots where the parcel borders two intersecting streets.
  * 3. In most cases, the Flankage edge (along the lot's depth) is longer than
  *    the Frontage edge (along the lot's width).
  */
@@ -332,12 +335,14 @@ export async function classifyParcelEdges(
         mergedAdjacentName[bestBIdx] = agg.adjacentName ?? undefined
         mergedAdjacentIsLane[bestBIdx] = true
         frontageOppositeEdgeIndex = mergedEdges[bestBIdx].subEdgeIndices[0]
-      } else if (agg.hasFlankage) {
-        mergedTypes[bestBIdx] = 'flankage'
+      } else if (!agg.adjacentIsLane && agg.adjacentName) {
+        // B faces a street (not lane): it's also frontage (double fronting)
+        mergedTypes[bestBIdx] = 'frontage'
         mergedAdjacentName[bestBIdx] = agg.adjacentName ?? undefined
         mergedAdjacentIsLane[bestBIdx] = false
         frontageOppositeEdgeIndex = mergedEdges[bestBIdx].subEdgeIndices[0]
       } else {
+        // B has no adjacent street/lane: Rear (only when no flankage elsewhere)
         if (flankageCount === 0) {
           mergedTypes[bestBIdx] = 'rear'
           mergedAdjacentName[bestBIdx] = undefined
