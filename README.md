@@ -8,6 +8,8 @@ Application for analyzing Vancouver parcel lots: edge types (Frontage, Flankage,
 | Language | TypeScript (strict mode) |
 | Build Tool | Vite |
 | Map | Mapbox GL JS |
+Application for analyzing Vancouver parcel lots: edge classification (Frontage, Flankage, Rear Lane, Rear, Side) and lot type (Corner, Double Fronting, Standard with/without Lane).
+
 
 ## Setup
 
@@ -16,12 +18,14 @@ Application for analyzing Vancouver parcel lots: edge types (Frontage, Flankage,
 
 2. **Mapbox token**  
    Create a [Mapbox account](https://account.mapbox.com/) and copy your default public token. In the project root, create a `.env` file (you can copy from `.env.example`) and add:
+   Create a [Mapbox account](https://account.mapbox.com/) and copy your default public token. In the project root, create a `.env` file and set:
 
    ```
    VITE_MAPBOX_ACCESS_TOKEN=pk.your_token_here
    ```
 
    (Note: The `.env` file is excluded from git for security.)
+   (Do not commit `.env`; it is listed in `.gitignore`. See `.env.example` if present.)
 
 3. **Parcel data**  
    Place `property-parcel-polygons.geojson` in the `public/` folder so it is served at `/property-parcel-polygons.geojson`. A copy step is included in the project (e.g. copy from repo root into `public/` if needed).
@@ -52,6 +56,7 @@ npm run preview   # optional: preview production build
 
 3. **Parcel Info Card & Classification**  
    When a parcel is selected (via click or search): info card showing full address, area (m²), primary street, and lot type label; edge visualization on the map (Frontage=blue, Flankage=orange, Rear Lane=purple, Rear=green, Side=gray). Debug mode (toggle) shows centroid, properties, per-edge table, and frontage-opposite index; edge numbers on the map are shown only when Debug is on.
+
 
 ## Data and logic
 
