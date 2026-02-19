@@ -23,7 +23,6 @@ Application for analyzing Vancouver parcel lots: edge types (Frontage, Flankage,
    ```
 
    (Note: The `.env` file is excluded from git for security.)
-   (Do not commit `.env`; it is listed in `.gitignore`. See `.env.example` if present.)
 
 3. **Parcel data**  
    Place `property-parcel-polygons.geojson` in the `public/` folder so it is served at `/property-parcel-polygons.geojson`. A copy step is included in the project (e.g. copy from repo root into `public/` if needed).
