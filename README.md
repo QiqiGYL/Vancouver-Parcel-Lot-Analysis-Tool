@@ -8,8 +8,6 @@ Application for analyzing Vancouver parcel lots: edge types (Frontage, Flankage,
 | Language | TypeScript (strict mode) |
 | Build Tool | Vite |
 | Map | Mapbox GL JS |
-Application for analyzing Vancouver parcel lots: edge classification (Frontage, Flankage, Rear Lane, Rear, Side) and lot type (Corner, Double Fronting, Standard with/without Lane).
-
 
 ## Setup
 
@@ -65,15 +63,15 @@ npm run preview   # optional: preview production build
 
 ### Edge Types
 
-- **Frontage**: Edge adjacent to the parcel's primary street
-- **Flankage**: Edge adjacent to a secondary street
+- **Frontage**: Edge adjacent to the parcel's primary street (matched by street name from parcel attributes + spatial proximity to road centerline)
+- **Flankage**: Edge adjacent to a secondary street (a different street from the primary). Typically seen on corner lots.
 - **Rear Lane**: Edge adjacent to a lane or alley
 - **Rear**: Edge on the opposite side of the Frontage that is not adjacent to any road or lane
 - **Side**: Any remaining edge connecting the Frontage/Flankage side to the Rear/Rear Lane side
 
 ### Lot types (priority order)
 
-- **Corner Lot**: Has both a Frontage edge and a Flankage edge
-- **Double Fronting**: Has 2 Frontage edges facing different streets
+- **Corner Lot**: Has both a Frontage edge and a Flankage edge (adjacent to two different streets)
+- **Double Fronting**: Has 2 Frontage edges facing different streets (opposite sides both face streets, not lanes)
 - **Standard with Lane**: 1 Frontage edge + a Rear Lane edge on the opposite side
-- **Standard without Lane**: 1 Frontage edge + a Rear edge on the opposite side 
+- **Standard without Lane**: 1 Frontage edge + a Rear edge on the opposite side (no adjacent lane)
