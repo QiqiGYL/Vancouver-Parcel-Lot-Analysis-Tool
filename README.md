@@ -2,6 +2,10 @@
 
 Application for analyzing Vancouver parcel lots: edge types (Frontage, Flankage, Rear Lane, Rear, Side) and lot type (Corner, Double Fronting, Standard with/without Lane).
 
+## UI Showcase
+
+![Vancouver Parcel Lot Analysis Tool](docs/ui-showcase.png)
+
 | Requirement |  |
 |-------------|--------|
 | Framework | React 18+ |
