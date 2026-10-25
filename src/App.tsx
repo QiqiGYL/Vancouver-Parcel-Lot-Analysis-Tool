@@ -1,3 +1,4 @@
+/* cf-build-marker: 2026-10-25-v3 */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { MapView } from '@/components/MapView'
 import { AddressSearch, type AddressCandidate } from '@/components/AddressSearch'
@@ -7,7 +8,8 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { analyzeParcel } from '@/lib/analyze'
 import type { ParcelFeature, ParcelAnalysis } from '@/types'
 
-const DEFAULT_PARCELS_URL = 'https://raw.githubusercontent.com/QiqiGYL/Vancouver-Parcel-Lot-Analysis-Tool/main/property-parcel-polygons.geojson'
+const DEFAULT_PARCELS_URL =
+  'https://raw.githubusercontent.com/QiqiGYL/Vancouver-Parcel-Lot-Analysis-Tool/main/property-parcel-polygons.geojson'
 const PARCELS_URL = import.meta.env.VITE_PARCELS_URL || DEFAULT_PARCELS_URL
 
 function buildAddress(s: string, n: string): string {
