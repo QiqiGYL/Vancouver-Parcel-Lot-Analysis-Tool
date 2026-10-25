@@ -1,0 +1,8 @@
+{
+  "name": "vancouver-parcel-lot-analysis-tool",
+  "compatibility_date": "2025-10-25",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
