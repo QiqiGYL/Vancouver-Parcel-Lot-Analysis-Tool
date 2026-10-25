@@ -153,7 +153,7 @@ export default function App() {
           )}
         </div>
         <aside className="app-sidebar">
-          {Analyzing...</p>}
+          {analyzing && <p className="app-analyzing">Analyzing...</p>}
           {selectedAnalysis && !analyzing && <InfoCard analysis={selectedAnalysis} />}
           {debugOpen && <DebugPanel analysis={selectedAnalysis} />}
         </aside>
