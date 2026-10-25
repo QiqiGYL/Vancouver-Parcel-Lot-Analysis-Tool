@@ -138,7 +138,7 @@ export default function App() {
               Failed to load parcel data: {loadError}. Check VITE_PARCELS_URL or network access to the GeoJSON.
             </div>
           )}
-          {loading && <div className="app-loading">Loading parcels閳?/div>}
+          {loading && <div className="app-loading">Loading parcels…</div>}
           {token ? (
             <MapView
               mapboxToken={token}
@@ -154,7 +154,7 @@ export default function App() {
           )}
         </div>
         <aside className="app-sidebar">
-          {analyzing && <p className="app-analyzing">Analyzing閳?/p>}
+          {analyzing && <p className="app-analyzing">Analyzing…</p>}
           {selectedAnalysis && !analyzing && <InfoCard analysis={selectedAnalysis} />}
           {debugOpen && <DebugPanel analysis={selectedAnalysis} />}
         </aside>
