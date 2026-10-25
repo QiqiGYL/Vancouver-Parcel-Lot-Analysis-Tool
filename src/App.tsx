@@ -7,8 +7,7 @@ import { useDebounce } from '@/hooks/useDebounce'
 import { analyzeParcel } from '@/lib/analyze'
 import type { ParcelFeature, ParcelAnalysis } from '@/types'
 
-const DEFAULT_PARCELS_URL =
-  'https://raw.githubusercontent.com/QiqiGYL/Vancouver-Parcel-Lot-Analysis-Tool/main/property-parcel-polygons.geojson'
+const DEFAULT_PARCELS_URL = 'https://raw.githubusercontent.com/QiqiGYL/Vancouver-Parcel-Lot-Analysis-Tool/main/property-parcel-polygons.geojson'
 const PARCELS_URL = import.meta.env.VITE_PARCELS_URL || DEFAULT_PARCELS_URL
 
 function buildAddress(s: string, n: string): string {
@@ -138,7 +137,7 @@ export default function App() {
               Failed to load parcel data: {loadError}. Check VITE_PARCELS_URL or network access to the GeoJSON.
             </div>
           )}
-          {loading && <div className="app-loading">Loading parcels…</div>}
+          {loading && <div className="app-loading">Loading parcels...</div>}
           {token ? (
             <MapView
               mapboxToken={token}
@@ -154,7 +153,7 @@ export default function App() {
           )}
         </div>
         <aside className="app-sidebar">
-          {analyzing && <p className="app-analyzing">Analyzing…</p>}
+          {Analyzing...</p>}
           {selectedAnalysis && !analyzing && <InfoCard analysis={selectedAnalysis} />}
           {debugOpen && <DebugPanel analysis={selectedAnalysis} />}
         </aside>
