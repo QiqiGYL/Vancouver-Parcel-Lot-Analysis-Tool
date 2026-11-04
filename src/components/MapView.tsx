@@ -7,7 +7,9 @@ import { edgesToGeoJSON } from '@/lib/edgeGeoJSON'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 const VANCOUVER_CENTER = { longitude: -123.12, latitude: 49.28, zoom: 12 }
-const PARCELS_URL = '/property-parcel-polygons.geojson'
+const DEFAULT_PARCELS_URL =
+  'https://raw.githubusercontent.com/QiqiGYL/Vancouver-Parcel-Lot-Analysis-Tool/main/property-parcel-polygons.geojson'
+const PARCELS_URL = import.meta.env.VITE_PARCELS_URL || DEFAULT_PARCELS_URL
 
 const EDGE_COLORS: Record<string, string> = {
   frontage: '#2563eb',
